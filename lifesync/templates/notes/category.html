@@ -1,0 +1,63 @@
+{% extends 'common.html' %}
+
+{% block head %}
+    <title>Notes</title>
+    <style>
+        .collapsible-content {
+            display: none;
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        function collapse(collapsible) {
+            let contents = collapsible.getElementsByClassName("collapsible-content");
+            let button = document.getElementById(collapsible.id + "_collapse");
+            if (button.textContent === "Create a note!!") {
+                button.textContent = "Collapse";
+            } else {
+                button.textContent = "Create a note!!";
+            }
+            for (let i = 0; i < contents.length; i++) {
+                if (contents[i].style.display === "block") {
+                    contents[i].style.display = "none";
+                } else {
+                    contents[i].style.display = "block";
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="collapsible" id="create_note">
+    <button class="btn btn-primary" id="create_note_collapse" onclick="collapse(this.parentElement)">Create a note!!</button>
+    <div class="collapsible-content">
+        <form method="POST" action="create/">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td><label for="create_note_name">Name</label></td>
+                    <td><input type="text" id="create_note_name" name="name"></td>
+                </tr>
+                <tr>
+                    <td><label for="create_note_description">Description</label></td>
+                    <td><input type="text" id="create_note_description" name="description"></td>
+                </tr>
+            </table>
+            <input class="btn btn-primary" type="submit">
+        </form>
+    </div>
+</div>
+    <table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    {% for row in rows %}
+    <tr>
+        <td><a href="/notes/view/{{ row.id }}">{{ row.name }}</a></td>
+        <td>{{ row.description }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

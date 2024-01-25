@@ -1,0 +1,46 @@
+{% extends 'common.html' %}
+
+{% block head %}
+<title>Expenses</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+<div class="col-md-6"><h2>Enter a new expense</h2>
+<form method="post" action="{% url 'add-expense' %}">
+    <br>
+    <br>
+    <label>Title:</label>
+    <input type="text" required="required" name="expenseTitle">
+    <br>
+    <label>Amount:</label>
+    <input type="number" required="required" name="expenseAmount">
+    <br>
+    <label>Description:</label>
+    <input type="text" name="expenseDescription">
+    <br>
+    <label>Expense Category:</label>
+    <select name="expenseCategory">
+        {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <button class="btn btn-primary" type="submit">Submit</button>
+    {% csrf_token %}
+</form>
+    {% if added %}
+        <p>Expense {{ request.session.expenseTitle }} has been added..</p>
+    {% endif %}
+<br>
+    <form method="get" action="{% url 'report' %}">
+        <button class="btn btn-primary" type="submit">View Report</button>
+    </form>
+    <br>
+    <form method="get" action="{% url 'view-expense' %}">
+        <button class="btn btn-primary" type="submit">View All</button>
+    </form>
+</div>
+</div>
+{% endblock %}

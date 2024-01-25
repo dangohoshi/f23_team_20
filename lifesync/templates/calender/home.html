@@ -1,0 +1,272 @@
+{% extends 'common.html' %}
+
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- custom css -->
+<style>
+            body {
+    font-family: Verdana, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.calendar-container {
+    width: 85%;
+    height: 90%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.analytics {
+    background: rgb(255, 199, 185);;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.analytics h2 {
+    color: rgb(186, 75, 47);;
+    margin: 0 0 10px 0;
+}
+
+/* Month header */
+.month {
+    padding: 20px 25px;
+    background: rgb(223, 108, 79);;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+}
+
+/* Weekdays (Mon-Sun) */
+.weekdays {
+    margin: 0;
+    padding: 10px 0;
+    background-color: #eee;
+    border-bottom: 2px solid #ddd;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+}
+
+/* Days (1-31) */
+.days {
+    padding: 10px 0;
+    background: #fff;
+    margin: 0;
+}
+
+
+.days li .active {
+    /* Styles for highlighting the specific day number */
+    font-weight: bold;
+    color: #d26d6d;
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #777;
+}
+
+/* Highlight the "current" day */
+.days li .active {
+    padding: 5px;
+    background: rgb(186, 75, 47);;
+    color: white;
+    border-radius: 50%;
+}
+
+/* Event styling */
+.days li.event {
+    position: relative;
+    color: rgb(186, 75, 47);;
+}
+
+.event-desc {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 10px;
+    background: #ffe5d3;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: #d26d6d;
+}
+
+/* Navigation buttons */
+.month .prev, .month .next {
+    cursor: pointer;
+    position: relative;
+    top: -3px;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.analytics {
+    display: flex; /* Enables Flexbox */
+    justify-content: space-around; /* Distributes space around items */
+    align-items: center; /* Aligns items vertically */
+    background: rgb(255, 199, 185);
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.analytics h2 {
+    flex-basis: 100%; /* Makes the title take the full width */
+    color: rgb(186, 75, 47);
+    margin-bottom: 10px;
+}
+
+.summary-item p {
+    margin: 0; /* Removes default paragraph margins */
+}
+
+
+.month .prev:hover, .month .next:hover {
+    color: #dcd3
+}
+
+.calendar-container {
+
+    height: 100%;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow: auto; /* Add scroll for overflow content */
+}
+html, body {
+    height: 90%;
+    margin: 0;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+    padding: 20px;
+}
+.analytics_heading{
+    font-weight: 900;
+    color: #714242;
+}
+/* Custom Styles */
+body, h1, p, .navbar-brand, .nav-link {
+    font-family: 'DM Sans', sans-serif;
+    color: rgb(186, 75, 47);
+}
+.navbar {
+    background-color: rgb(255, 219, 213);
+}
+.main-content{
+    margin-top: 100px;
+    min-height: 55vh;
+}
+#expenseReportPie  {
+    height: 50px;
+    width: 50px;
+}
+</style>
+
+
+<!-- Bootstrap CDN -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- DM Sans Font -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+<!-- custom css -->
+
+<!-- Bootstrap JS and Popper.js via CDN -->
+{% endblock %}
+
+{% block body %}
+<div class="calendar-container mt-5">
+
+    
+    <h2>Summary</h2>
+    <div class="analytics">
+        <div class="summary-item">
+            <p><span class="analytics_heading">Meetings this month: </span>{{ total_meetings }}</p>
+        </div>
+      
+        <div class="summary-item">
+            {% if upcoming_meeting %}
+                <p><span class="analytics_heading">Next Meeting: </span>{{ upcoming_meeting.title }} on {{ upcoming_meeting.start|date:"Y-m-d H:i" }}</p>
+            {% else %}
+                <p>No upcoming meetings</p>
+            {% endif %}
+        </div>
+
+        <div class="summary-item">
+            <p><span class="analytics_heading">Average Duration of Events: </span>{{ average_duration }} mins</p>
+        </div>
+    </div>
+    
+
+
+    <!-- Month Navigation -->
+    <div class="month">
+
+        <!-- <li class="prev">&#10094;</li>
+        <li class="next">&#10095;</li> -->
+     {{ current_month }}<br><span style="font-size:16px">{{ current_year }}</span>
+    </div>
+
+    
+
+    <!-- Weekdays -->
+    <!-- <ul class="weekdays">
+      <li>Mo</li>
+      <li>Tu</li>
+      <li>We</li>
+      <li>Th</li>
+      <li>Fr</li>
+      <li>Sa</li>
+      <li>Su</li>
+    </ul> -->
+
+    <ul class="weekdays">
+        {% for day in weekdays %}
+            <li>{{ day }}</li>
+        {% endfor %}
+    </ul>
+
+
+
+
+    <ul class="days">
+        {% for day in month_days %}
+        <li class="{% if day|date:'Y-m-d' in meeting_days %}event{% endif %}">
+            <span class="{% if day|date:'Y-m-d' in meeting_days %}active{% endif %}">{{ day.day }}</span>
+            {% if day|date:'Y-m-d' in meeting_days %}
+
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+
+
+</div>
+{% endblock %}

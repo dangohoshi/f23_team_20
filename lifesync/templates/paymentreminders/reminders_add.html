@@ -1,0 +1,36 @@
+{% extends 'common.html' %}
+
+{% block head %}
+    <title>Payment Reminders</title>
+{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-md-6"><h2>Enter a new payment</h2>
+            <form method="post" action="{% url 'add-reminder' %}">
+                <br>
+                <br>
+                <label>Title:</label>
+                <input type="text" required="required" name="paymentTitle">
+                <br>
+                <label>Amount:</label>
+                <input type="number" required="required" name="amount">
+                <br>
+                <label>Description:</label>
+                <input type="text" name="paymentDescription">
+                <br>
+                <label>Date Due:</label>
+                <input type="date" required="required" name="paymentDueDate">
+                <br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+                {% csrf_token %}
+            </form>
+            {% if added %}
+                <p>Payment reminder for {{ request.session.paymentTitle }} has been added..</p>
+            {% endif %}
+            {% if error %}
+                <p>{{ request.session.errorMsg }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

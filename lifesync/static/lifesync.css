@@ -1,0 +1,20 @@
+/* Custom Styles */
+:root {
+    --text-color: rgb(186, 75, 47);
+    --navbar-color: rgb(255, 219, 213);
+}
+body, h1, p, .navbar-brand, .nav-link {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-color);
+}
+.navbar {
+    background-color: var(--navbar-color);
+}
+.main-content{
+    margin-top: 100px;
+    min-height: 55vh;
+}
+#expenseReportPie  {
+    height: 50px;
+    width: 50px;
+}

@@ -1,0 +1,186 @@
+{% extends 'common.html' %}
+
+{% block head %}
+    <title>To-Do List</title>
+    <style>
+        .collapsible-content {
+            display: none;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 5px;
+        }
+    </style>
+    <script>
+
+        function collapse(collapsible) {
+            let contents = collapsible.getElementsByClassName("collapsible-content");
+            let button = document.getElementById(collapsible.id + "_collapse");
+            if (button.textContent === "Add a to-do item!!") {
+                button.textContent = "Collapse";
+            } else {
+                button.textContent = "Add a to-do item!!";
+            }
+            for (let i = 0; i < contents.length; i++) {
+                if (contents[i].style.display === "block") {
+                    contents[i].style.display = "none";
+                } else {
+                    contents[i].style.display = "block";
+                }
+            }
+        }
+
+        let csrfToken = '{% csrf_token %}';
+        let updateLink = "/to-do/update/";
+
+        function htmlToDjango(isoDateTime) {
+            let date = new Date(isoDateTime);
+
+            let month = date.toLocaleString('default', { month: 'short' });
+            let day = date.getDate();
+            let year = date.getFullYear();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let period = hour >= 12 ? 'p.m.' : 'a.m.';
+
+            // Convert the hour to 12-hour format
+            if (hour > 12) {
+                hour -= 12;
+            }
+
+            return `${month}. ${day}, ${year}, ${hour}:${minute} ${period}`;
+        }
+
+        function djangoToHtml(dateTimeString) {
+            const parts = dateTimeString.split(/[,:\s.]+/);
+
+            if (parts.length === 8) {
+                const monthNames = [
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ];
+
+                // Map the month abbreviation to its numerical value
+                let month = monthNames.indexOf(parts[0]);
+                let day = parseInt(parts[1]);
+                let year = parseInt(parts[2]);
+                let hour = parseInt(parts[3]);
+                let minute = parseInt(parts[4]);
+
+                // Determine if it's AM or PM
+                const isPM = parts[5].toLowerCase() === "p";
+
+                if (isPM && hour !== 12) {
+                    // Convert to 24-hour format
+                    hour += 12;
+                } else if (!isPM && hour === 12) {
+                    // Midnight (12:00 AM) should be 00:00 in 24-hour format
+                    hour = 0;
+                }
+
+                return `${year}-${(month + 1).toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}T${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+            }
+
+            return null;
+        }
+
+
+        function update(row) {
+            let inputs = row.getElementsByTagName("input");
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("disabled");
+            }
+            let date = row.children[1].innerText;
+
+            row.children[1].innerHTML = `<input type="datetime-local">`;
+            row.children[1].children[0].value = djangoToHtml(date);
+
+            let button = row.getElementsByTagName("button")[0];
+            button.innerText = "Save";
+            button.onclick = function () {
+                let status = inputs[0].checked;
+                let deadline = inputs[1].value;
+                let item = inputs[2].value;
+
+                let xhr = new XMLHttpRequest()
+                let form = new FormData()
+
+                form.append("status", status)
+                form.append("deadline", deadline)
+                form.append("item", item)
+
+                xhr.open("POST", updateLink + row.id.split("_")[1] + "/", false)
+                xhr.setRequestHeader("X-CSRFToken", csrfToken)
+                xhr.send(form)
+
+                for (let i = 0; i < inputs.length; i++) {
+                    inputs[i].setAttribute("disabled", "disabled");
+                }
+                row.children[1].innerHTML = htmlToDjango(deadline);
+                button.innerText = "Edit";
+                window.location.reload();
+            };
+        }
+
+        function share(shareUri) {
+            navigator.clipboard.writeText(location.host + shareUri);
+            window.alert("The sharing link is copied to your clipboard.");
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div>
+    <h1>
+        {{ name }}
+    </h1>
+    <button class="btn btn-primary" onclick="share('{{ share_uri }}')">
+        Share
+    </button><br><br>
+    <i>{{ date }}</i><br>
+    {{ description }}<br>
+</div>
+<br>
+<div class="collapsible" id="add_to_do_item">
+    <button class="btn btn-primary" id="add_to_do_item_collapse" onclick="collapse(this.parentElement)">Add a to-do item!!</button>
+    <div class="collapsible-content">
+        <form method="POST" action="{% url 'add to-do' id=id %}">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td><label for="add_to_do_list_deadline">Deadline</label></td>
+                    <td><input type="datetime-local" id="add_to_do_item_deadline" name="deadline" required></td>
+                </tr>
+                <tr>
+                    <td><label>Item</label></td>
+                    <td><input type="text" id="add_to_do_item_item" name="item"></td>
+                </tr>
+            </table>
+            <input class="btn btn-primary" type="submit">
+        </form>
+    </div>
+</div>
+<table>
+    <tr>
+        <th>Status</th>
+        <th>Deadline</th>
+        <th>Item</th>
+        <th>Actions</th>
+    </tr>
+    {% for row in rows %}
+        <tr id="row_{{ row.id }}">
+            <td><input type="checkbox" disabled {{ row.status }}></td>
+            <td>{{ row.deadline }}</td>
+            <td><input type="text" value="{{ row.item }}" disabled></td>
+            <td style="display: flex">
+                <button class="btn btn-primary" onclick="update(this.parentElement.parentElement);" style="margin-right: 2px">Edit</button>
+                <form method="POST" action="{{ row.delete_uri }}">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

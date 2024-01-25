@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% load socialaccount %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeSync - Dashboard</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DM Sans Font -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+    <!-- custom css -->
+    <!-- custom css -->
+    <style>
+        /* Custom Styles */
+        :root {
+            --text-color: {{ userPreferences.text_color|default:"rgb(186, 75, 47)" }};
+            --navbar-color: {{ userPreferences.navbar_color|default:"rgb(255, 219, 213)" }};
+        }
+        body, h1, p, .navbar-brand, .nav-link {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-color);
+        }
+        .navbar {
+            background-color: var(--navbar-color);
+        }
+        .main-content{
+            margin-top: 100px;
+            min-height: 55vh;
+        }
+    </style>
+</head>
+<body>
+
+{% if user.is_authenticated %}
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">LifeSync</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'homepage' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'to-do' %}">To-Do</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'calender' %}">Calendar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'expense' %}">Expense Tracking</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'reminders' %}">Payment Reminders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'notes' %}">Notes</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Profile
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container main-content">
+    <div class="row">
+        <!-- Left side content -->
+        <div class="col-md-6 mt-5">
+            <h1>Hi, {{ user.username }}</h1>
+            <h4>Welcome to LifeSync</h4>
+            <br></br>
+            <p>LifeSync is your all-in-one digital hub,
+             designed for today's busy lifestyle.
+                Seamlessly integrate tasks, calendars,
+                   and expenses in one intuitive platform.
+            <p>Experience organization and simplicity,
+            redefined with LifeSync.</p>
+            <form method="post" action="{% url 'select-colors' %}">
+                <button class="btn btn-primary" type="submit">Customize!</button>
+                {% csrf_token %}
+            </form>
+        </div>
+        <!-- Right side content -->
+        <div class="col-md-6">
+            <img src="https://img.freepik.com/free-vector/data-driven-concept-illustration_23-2149516262.jpg?w=1380&t=st=1698620352~exp=1698620952~hmac=4d49c94e3b91c3d5c7ddd48fdf71d835b0f7aa71bcb21e32a29ac0e0fff0334f" alt="People working" class="img-fluid rounded">
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="bg-light text-center text-lg-start mt-5">
+    <div class="container p-4">
+        <p>&copy; 2023 LifeSync. All rights reserved.</p>
+        <p>Team Members: Mahima Borah, Sambhav Jain, Zhichen Li</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS and Popper.js via CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% else %}
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#">LifeSync</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="about">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div>
+        <img src="static/lifesync_loginpage.png" alt="lifesync logo" class="rounded mx-auto d-block">
+    </div>
+    <div class="text-center">
+        <button type="button" class="btn btn-primary"><a  class="text-white" href="{% provider_login_url 'google' %}">Login With Google</a></button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="container p-4">
+            <p>&copy; 2023 LifeSync. All rights reserved.</p>
+            <p>Team Members: Mahima Borah, Sambhav Jain, Zhichen Li</p>
+        </div>
+    </footer>
+{% endif %}
+
+</body>
+</html>

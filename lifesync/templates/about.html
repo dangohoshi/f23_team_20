@@ -1,0 +1,106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% load socialaccount %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeSync - Dashboard</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DM Sans Font -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+    <!-- custom css -->
+    <!-- custom css -->
+    <style>
+        /* Custom Styles */
+        :root {
+            --text-color: {{ userPreferences.text_color|default:"rgb(186, 75, 47)" }};
+            --navbar-color: {{ userPreferences.navbar_color|default:"rgb(255, 219, 213)" }};
+        }
+        body, h1, p, .navbar-brand, .nav-link {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-color);
+        }
+        .navbar {
+            background-color: var(--navbar-color);
+        }
+        .main-content{
+            margin-top: 100px;
+            min-height: 55vh;
+        }
+
+    .large-text {
+        font-size: 18px;
+    }
+
+    </style>
+</head>
+<body>
+
+
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#">LifeSync</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- <div>
+        <img src="static/lifesync_loginpage.png" alt="lifesync logo" class="rounded mx-auto d-block">
+    </div> -->
+
+
+<!-- Main Content -->
+<div class="container main-content">
+    <div class="row">
+        <!-- Left side content -->
+        <div class="col-md-6 mt-2">
+            <h1>Welcome to LifeSync</h1>
+            <br></br>
+            <p class="large-text">LifeSync is your digital companion for a streamlined life in this busy world.</p>
+               <p class="large-text">
+                 Whether it's jotting down a quick memo, tracking a crucial payment, or synchronizing your meetings with Google Calendar, we have got you covered.
+                 
+                </p>
+            <p class="large-text">Designed with a user-friendly interface and powered by secure authentication, LifeSync is your one-stop solution to declutter your digital world and streamline your daily life.
+                <br></br> Dive in, and let's sync your life with LIFESYNC!</p>
+            <div class="text-center mt-5">
+                <button type="button" class="btn btn-danger"><a  class="text-white" href="{% provider_login_url 'google' %}">Login With Google</a></button>
+            </div>
+        </div>
+        <!-- Right side content -->
+        <div class="col-md-6">
+            <img src="https://img.freepik.com/free-vector/data-driven-concept-illustration_23-2149516262.jpg?w=1380&t=st=1698620352~exp=1698620952~hmac=4d49c94e3b91c3d5c7ddd48fdf71d835b0f7aa71bcb21e32a29ac0e0fff0334f" alt="People working" class="img-fluid rounded">
+        </div>
+    </div>
+
+
+</div>
+<!-- Footer -->
+<footer class="bg-light text-center text-lg-start mt-5">
+    <div class="container p-4">
+        <p>&copy; 2023 LifeSync. All rights reserved.</p>
+        <p>Team Members: Mahima Borah, Sambhav Jain, Zhichen Li</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS and Popper.js via CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+ 
+
+</body>
+</html>

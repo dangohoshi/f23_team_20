@@ -1,0 +1,5 @@
+# Sample ini file
+# Actual config is accessible on server
+
+[Django]
+secret=

@@ -1,0 +1,51 @@
+{% extends 'common.html' %}
+
+{% block head %}
+<title>Note</title>
+<style>
+    .collapsible-content {
+        display: none;
+        overflow: hidden;
+    }
+</style>
+<script>
+    function collapse(collapsible) {
+        let contents = collapsible.getElementsByClassName("collapsible-content");
+        let button = document.getElementById(collapsible.id + "_collapse");
+        if (button.textContent === "Share") {
+            button.textContent = "Collapse";
+        } else {
+            button.textContent = "Share";
+        }
+        for (let i = 0; i < contents.length; i++) {
+            if (contents[i].style.display === "block") {
+                contents[i].style.display = "none";
+            } else {
+                contents[i].style.display = "block";
+            }
+        }
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="collapsible" id="share">
+    <button class="btn btn-primary" id="share_collapse" onclick="collapse(this.parentElement)">Share</button>
+    <div class="collapsible-content">
+        <form method="POST" action="/notes/email/">
+            {% csrf_token %}
+            <label for="email">email invitation to:</label>
+            <input type="email" id="email" name="email">
+            <input type="hidden" value="{{ share_uri }}" id="share_uri" name="share_uri">
+            <input class="btn btn-primary" type="submit">
+        </form>
+    </div>
+</div>
+{{ parsed | safe }} <br><br>
+<form method="POST" action="edit/">
+    {% csrf_token %}
+    <label for="content">Put your notes here</label><br>
+    <textarea id="content" name="content" style="width: 500px">{{ content }}</textarea><br>
+    <input class="btn btn-primary" type="submit">
+</form>
+{% endblock %}

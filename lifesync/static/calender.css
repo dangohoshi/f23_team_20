@@ -1,0 +1,107 @@
+body {
+    font-family: Verdana, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.calendar-container {
+    width: 80%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.analytics {
+    background: #dcd3ff;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.analytics h2 {
+    color: #5f4b8b;
+    margin: 0 0 10px 0;
+}
+
+/* Month header */
+.month {
+    padding: 20px 25px;
+    background: #5f4b8b;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+}
+
+/* Weekdays (Mon-Sun) */
+.weekdays {
+    margin: 0;
+    padding: 10px 0;
+    background-color: #eee;
+    border-bottom: 2px solid #ddd;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+}
+
+/* Days (1-31) */
+.days {
+    padding: 10px 0;
+    background: #fff;
+    margin: 0;
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #777;
+}
+
+/* Highlight the "current" day */
+.days li .active {
+    padding: 5px;
+    background: #9b59b6;
+    color: white;
+    border-radius: 50%;
+}
+
+/* Event styling */
+.days li.event {
+    position: relative;
+    color: #5f4b8b;
+}
+
+.event-desc {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 10px;
+    background: #dcd3ff;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: #5f4b8b;
+}
+
+/* Navigation buttons */
+.month .prev, .month .next {
+    cursor: pointer;
+    position: relative;
+    top: -3px;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.month .prev:hover, .month .next:hover {
+    color: #dcd3
+}

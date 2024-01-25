@@ -1,0 +1,43 @@
+{% extends 'common.html' %}
+
+{% block head %}
+<title>Expenses</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <canvas id="expenseReportPie" height="450vm" width="450vm">
+    </canvas>
+</div>
+<script>
+    var expensesData = {{ category_expense|safe }};
+    var categories = expensesData.map(item => item.category);
+    var totalAmounts = expensesData.map(item => item.total_amount);
+
+    // Render pie chart
+    var ctx = document.getElementById('expenseReportPie').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: totalAmounts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                    'rgba(33, 150, 243, 0.7)',
+                ],
+            }],
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+        }
+    });
+</script>
+{% endblock %}

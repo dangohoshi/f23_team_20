@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        @font-face {
+            font-family: 'bluey';
+            src: local('Heyam'),
+                url({% static 'Heyam.ttf' %}) format("truetype");
+        }
+        @font-face {
+            font-family: 'bluey_headline';
+            src: local('hello-headline'), url({% static 'hello-headline.ttf' %}) format("truetype");
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #84c8f9;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td>
+            <img src="{% static 'bluey_touch_nose.png' %}" alt="Bluey" width="300px" style="user-select: none">
+        </td>
+        <td>
+            <h1 style="font-family: bluey, serif; color: white; font-size: 48px">Hooray, you are getting an error!</h1><br>
+            <a style="font-family: bluey_headline, serif; color: white; font-size: 24px">{% block error %}{% endblock %}</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
